@@ -5,6 +5,47 @@ html(lang="en")
     title= title
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+  nav(class="navbar navbar-expand-lg bg-light")
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Solis</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/modules">Modules</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/chat">Chat</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/teacher">Teacher</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/dict">Dict</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/knowledge">Knowledge</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/reg">Registration</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile">Profile</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  block content

@@ -1,0 +1,14 @@
+extends layout
+block content
+  h1 Log In
+  div
+    form(action="/login", method="post")
+      label(for="email") Email
+      input(id="email",name="email",type="email",required)
+      br
+      label(for="password") Password
+      input(id="password",name="password",type="password",required) 
+      br
+      input(id="submit",type="submit", value="Submit")
+      p
+      a(href="/") Go to main bage
