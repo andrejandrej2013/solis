@@ -1,0 +1,8 @@
+demo-user/seeds:
+npx sequelize-cli seed:generate --name demo-user
+
+run seeds:
+npx sequelize-cli db:seed:all
+
+undo all seeds:
+npx sequelize-cli db:seed:undo:all
