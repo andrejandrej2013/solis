@@ -11,6 +11,9 @@ The application uses technologies such as:
   - docker
 
 To run programm you need docker desktop and to run this command:
+
   docker-compose up -d
+  
 or without docker desktop():
+
   npm start
