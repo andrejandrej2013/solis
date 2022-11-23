@@ -9,24 +9,17 @@ services:
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
-    # environment:
-    #   - PORT=3000
-    # env_file:
-    #   - ./.env
     depends_on:
-      - db
+      - postgres
     container_name: app
-  db:
-    image: mysql:latest
+  postgres:
+    image: postgres
     restart: always
-    volumes:
-      - ./tmp/db:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: solis
     ports:
-      - "8101:3306"
-    expose:
-      - '8101'
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-    container_name: solis_db
+      - "5432:5432"
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: codes

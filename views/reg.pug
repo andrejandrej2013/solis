@@ -9,8 +9,8 @@ block content
       label(for="email") Email
       input(id="email",name="email",type="email",required)
       br
-      label(for="date_of_birth") Date of birth
-      input(id="date_of_birth",name="date_of_birth",type="date",required)
+      label(for="dateOfBirth") Date of birth
+      input(id="dateOfBirth",name="dateOfBirth",type="date",required)
       br
       label(for="firstName") First Name
       input(id="fname",name="firstName",type="text",required)
@@ -27,9 +27,7 @@ block content
       //- remember_token - not sure how to do it
       //- input(id="token",type="hidden") 
       input(id="submit",type="submit", value="Submit")
-  div(id="demo")
-  script.
-    function myFunction() {
-      var x = document.getElementById("email").value;
-      document.getElementById("demo").innerHTML = x;
-    }
+
+  if(typeof errors != 'undefined')
+    each error in errors
+      li(class="list-group-item list-group-item-danger")=error.msg

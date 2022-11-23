@@ -1,0 +1,3 @@
+when migrating by sequelize-cli, the 'host' must be changed to localhost
+when we interact inside, the 'host' must be changed to postgres - docker db network
+
