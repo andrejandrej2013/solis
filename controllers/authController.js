@@ -4,6 +4,15 @@ const jwt = require('jsonwebtoken');//add token
 // const dotenv = require('dotenv');
 const {validationResult} = require("express-validator");
 const saltRounds = 10;
+const {secret, expiresIn} = require("../config")
+
+const generateAccessToken = (id, username) => {
+    const payload = {
+        id,
+        username,
+    }
+    return jwt.sign(payload, secret, {expiresIn: expiresIn})
+}
 
 class authController {
     async registration(req, res) {
@@ -27,13 +36,9 @@ class authController {
                     param: 'dateOfBirth',
                     location: 'body'
                 }) ;
-                // return res.render('reg', {errors : [{
-                //     value: dateOfBirth,
-                //     msg: 'Incorrect date of birth',
-                //     param: 'dateOfBirth',
-                //     location: 'body'
-                // }]});
             }
+
+            //check for unique email
             const alreadyExistsUser = await userModel.findOne({where:{email: email}}).catch(
                 (err) => {
                     console.log("Error: ", err);
@@ -46,23 +51,14 @@ class authController {
                     param: 'email',
                     location: 'body'
                 });
-
-                // return res.render('reg', {errors : [{
-                //     value: email,
-                //     msg: 'User with this email address already exists',
-                //     param: 'email',
-                //     location: 'body'
-                // }]});
             }
 
-            //sends errors
-            console.log(errors)
-            console.log(errors.length)
-
+            // sends errors if there are
             if(errors.length){
                 return res.render('reg', {errors:errors});
             }
 
+            // hash password and saves user
             bcrypt.hash(password, saltRounds, async function(err, hash) {
                 // Store hash in database here
                 const newUser = userModel.build({username:username, firstName:firstName, lastName:lastName, email:email, password:hash, dateOfBirth:dateOfBirth});
@@ -81,57 +77,43 @@ class authController {
             return res.render('reg', {message:"Registration cannot be done at the moment. Please try it later"});
         }
     }
+
     async login(req, res) {
-        // var password = "Fkdj^45ci@Jad";  // Original Password
-        // var password2 = "Fkdj^45ci@Jad";
-        // bcrypt.hash(password, saltRounds, function(err, hash) { // Salt + Hash
-        // bcrypt.compare(password2, hash, function(err, result) {  // Compare
-        //     // if passwords match
-        //     if (result) {
-        //         console.log("It matches!")
-        //     }
-        //     // if passwords do not match
-        //     else {
-        //         console.log("Invalid password!");
-        //     }
-        // });
-        // });
+        try {
 
-        console.log(req.body);
-        const user = await userModel.findOne({where:{email: req.body.email}}).catch(
-            (err) => {
-            console.log("Error: ", err);
+            const user = await userModel.findOne({where:{email: req.body.email}}).catch(
+                (err) => {
+                console.log("Error: ", err);
+                }
+            );
+            if(!user){
+                res.status(404).json({ error : "User does not exist" });
             }
-        );
-        if(user){
-            // console.log(`password : ${user.password}`)
 
+            //check password
             bcrypt.compare(req.body.password, user.password, function(err, result) {
-                if (result) {
-                    console.log("It matches!")
-                    // token = jwt.sign({ "id" : user.id,"email" : user.email,"first_name":user.firstName },process.env.SECRET);
-                    // res.status(200).json({ token : token });
+                if(err){
+                    return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
                 }
-                else {
-                  console.log("Invalid password!");
-                  res.status(400).json({ error : "Password Incorrect" });
-                }
-              });
-            // const password_valid = await bcrypt.compare(req.body.password,user.password);
-            
-            // if(password_valid){
-            //     token = jwt.sign({ "id" : user.id,"email" : user.email,"first_name":user.firstName },process.env.SECRET);
-            //     res.status(200).json({ token : token });
-            // } else {
-            // res.status(400).json({ error : "Password Incorrect" });
-            // }
-        
-        }else{
-            res.status(404).json({ error : "User does not exist" });
-        }
-    }
-    async getUser(req, res) {
+            });
 
+            const token = generateAccessToken(user.id, user.username);
+            return res.render('profile', {message:"Here you are"});
+
+        } catch (e) {
+            console.log("Error: ", e);
+            return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
+        }
+        
+        
+    }
+    async profile(req, res) {
+        try {
+            const{id, username} = req.user
+            return res.render('profile', {id,username});
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
