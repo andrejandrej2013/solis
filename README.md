@@ -7,7 +7,7 @@ This web application is a tool for learning the Latvian language (not ready yet)
 The application uses technologies such as:
   - expressjs
   - .pug
-  - mysql
+  - postgresql
   - docker
 
 To run programm you need docker desktop and to run this command:
