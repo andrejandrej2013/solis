@@ -1,19 +1,16 @@
 var express = require('express');
 var router = express.Router();
-const Sequelize  = require('sequelize');
-const sequelize = new Sequelize("postgres://user:pass@postgres:5432/codes");
-
-
-
-//routes
+// const Sequelize  = require('sequelize');
+const authMiddleware = require ("../middleware/authMiddleware")
+const profileController = require("../controllers/profileController")
 const registerApi = require("./reg");
+const getUserMiddleware = require('../middleware/getUserMiddleware');
 
 //use routes
 router.use(registerApi);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
   res.render('index', { title: 'Solis' });
 });
 // users reg
@@ -24,14 +21,11 @@ router.get('/reg', async function(req, res, next) {
 router.get('/login', function(req, res, next) {
   res.render('login');
 });
-router.post('/login', function(req, res) {
-  console.log(req.body);
-  return res.redirect('/');
-});
-router.get('/profile', function(req, res, next) {
-  res.render('profile');
-});
-//navigation
+router.get('/profile', [
+  authMiddleware.decodeToken,
+  getUserMiddleware('id','username','email','firstName')
+], profileController.profile)
+
 router.get('/modules', function(req, res, next) {
   res.render('modules');
 });

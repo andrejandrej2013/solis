@@ -3,6 +3,10 @@ const router = express.Router();
 const authController = require("../controllers/authController");
 const {check} = require("express-validator");
 const authMiddleware = require ("../middleware/authMiddleware")
+const getUserMiddleware = require('../middleware/getUserMiddleware');
+const profileController = require("../controllers/profileController")
+
+
 
 router.post('/reg', [
     check('username', "Cannot be emplty").notEmpty(),
@@ -16,7 +20,9 @@ router.post('/reg', [
 router.post('/login',[
     check('email', "Cannot be emplty").isEmail(),
     check('password', "Cannot be emplty").notEmpty(),
-], authController.login);
-router.get('/users', authMiddleware, authController.profile)
+    authMiddleware.login,//create token
+    getUserMiddleware('firstName','lastName','email'),//get info about user
+], profileController.profile);
+
 
 module.exports = router;

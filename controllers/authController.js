@@ -4,15 +4,16 @@ const jwt = require('jsonwebtoken');//add token
 // const dotenv = require('dotenv');
 const {validationResult} = require("express-validator");
 const saltRounds = 10;
-const {secret, expiresIn} = require("../config")
+// const {secret, expiresIn} = require("../config")
+// const profileController = require("./profileController")
 
-const generateAccessToken = (id, username) => {
-    const payload = {
-        id,
-        username,
-    }
-    return jwt.sign(payload, secret, {expiresIn: expiresIn})
-}
+// const generateAccessToken = (id, username) => {
+//     const payload = {
+//         id,
+//         username,
+//     }
+//     return jwt.sign(payload, secret, {expiresIn: expiresIn})
+// }
 
 class authController {
     async registration(req, res) {
@@ -78,43 +79,41 @@ class authController {
         }
     }
 
-    async login(req, res) {
-        try {
+    // async login(req, res,next) {
+    //     try {
 
-            const user = await userModel.findOne({where:{email: req.body.email}}).catch(
-                (err) => {
-                console.log("Error: ", err);
-                }
-            );
-            if(!user){
-                res.status(404).json({ error : "User does not exist" });
-            }
+    //         const user = await userModel.findOne({where:{email: req.body.email}}).catch(
+    //             (err) => {
+    //             console.log("Error: ", err);
+    //             }
+    //         );
+    //         if(!user){
+    //             res.status(404).json({ error : "User does not exist" });
+    //         }
 
-            //check password
-            bcrypt.compare(req.body.password, user.password, function(err, result) {
-                if(err){
-                    return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
-                }
-            });
+    //         //check password
+    //         bcrypt.compare(req.body.password, user.password, function(err, result) {
+    //             if(err){
+    //                 return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
+    //             }
+    //         });
+            
+    //         const token = generateAccessToken(user.id, user.username);
+            
+    //         req.token=token
+    //         req.user = {id:user.id, username:user.username}
+    //         console.log(`Token = ${req.token}`)
+    //         // return profileController.profile(req, res)
+            
+    //         next();
 
-            const token = generateAccessToken(user.id, user.username);
-            return res.render('profile', {message:"Here you are"});
-
-        } catch (e) {
-            console.log("Error: ", e);
-            return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
-        }
+    //     } catch (e) {
+    //         console.log("Error: ", e);
+    //         return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
+    //     }
         
         
-    }
-    async profile(req, res) {
-        try {
-            const{id, username} = req.user
-            return res.render('profile', {id,username});
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // }
 }
 
 module.exports = new authController()
