@@ -1,65 +1,62 @@
 const jwt =require('jsonwebtoken')
-const {secret, expiresIn} = require("../config")
-const userModel = require("../_database/models").user;
-const bcrypt = require("bcrypt");
-
-
-
-
-const generateAccessToken = (id, username) => {
-    const payload = {
-        id,
-        username,
-    }
-    return jwt.sign(payload, secret, {expiresIn: expiresIn})
-}
+const {secret} = require("../config")
 
 class authMiddleware{
-    async login(req, res,next) {
-        try {
-
-            const user = await userModel.findOne({where:{email: req.body.email}}).catch(
-                (err) => {
-                console.log("Error: ", err);
-                }
-            );
-            if(!user){
-                res.status(404).json({ error : "User does not exist" });
-            }
-
-            //check password
-            bcrypt.compare(req.body.password, user.password, function(err, result) {
-                if(err){
-                    return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
-                }
-            });
-            
-            const token = generateAccessToken(user.id, user.username);
-            console.log(user.id);
-
-            req.userId=user.id;
-            req.token=token;
-
-            next();
-        } catch (e) {
-            console.log("Error: ", e);
-            return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
-        }
-    }
     async decodeToken (req, res, next){
-    
         try {
-            const token = req.headers.authorization.split(' ')[1]
-            if (!token){
-                return res.status(403).json({message:"User is not authorized"})
+
+            const tokenCookie = req.cookies.Authorization;
+            if(typeof tokenCookie !== 'undefined'){
+                const token = tokenCookie.split(' ')[1];
+                try {
+                    const decodedData = jwt.verify(token,secret);
+                    req.user = decodedData;
+                    console.log(req.user);
+                } catch (err) {
+                    console.log("Error: ", err);
+                        let errors = [];
+                        req.errors = errors.push({
+                            value: 'undefine',
+                            msg: 'invalid token',
+                            param: '-',
+                            location: 'body'
+                        }) ;
+                        res.redirect('/login')
+                }
+                
+                next();
+            }else{
+                let errors = [];
+                req.errors = errors.push({
+                    value: 'undefine',
+                    msg: 'You must be logged in',
+                    param: '-',
+                    location: 'body'
+                }) ;
+                res.redirect('/login')
+
             }
-            const decodedData = jwt.verify(token,secret)
-            req.user = decodedData
-            next()
+
         } catch (error) {
             console.log(error)
             return res.status(403).json({message:"User is not authorized 2"})
         }
+    }
+    async notAuthenticated (req, res, next){
+        const tokenCookie = req.cookies.Authorization;
+            if(typeof tokenCookie === 'undefined'){
+                next();
+            }else{
+                let errors = [];
+                req.errors = errors.push({
+                    value: 'undefine',
+                    msg: 'You must be logged in',
+                    param: '-',
+                    location: 'body'
+                }) ;
+                res.redirect('/profile')
+
+            }
     }
 }
 module.exports = new authMiddleware;

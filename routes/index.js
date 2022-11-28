@@ -14,16 +14,20 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Solis' });
 });
 // users reg
-router.get('/reg', async function(req, res, next) {
+router.get('/reg',[
+  authMiddleware.notAuthenticated,
+], async function(req, res, next) {
   res.render('reg');
 });
 
-router.get('/login', function(req, res, next) {
+router.get('/login',[
+  authMiddleware.notAuthenticated,
+], function(req, res, next) {
   res.render('login');
 });
 router.get('/profile', [
   authMiddleware.decodeToken,
-  getUserMiddleware('id','username','email','firstName')
+  getUserMiddleware('username','email','firstName','lastName'),
 ], profileController.profile)
 
 router.get('/modules', function(req, res, next) {
@@ -32,10 +36,14 @@ router.get('/modules', function(req, res, next) {
 router.get('/dict', function(req, res, next) {
   res.render('dict');
 });
-router.get('/teacher', function(req, res, next) {
+router.get('/teacher',[
+  authMiddleware.decodeToken,
+], function(req, res, next) {
   res.render('teacher');
 });
-router.get('/chat', function(req, res, next) {
+router.get('/chat',[
+  authMiddleware.decodeToken,
+], function(req, res, next) {
   res.render('chat');
 });
 router.get('/knowledge', function(req, res, next) {
