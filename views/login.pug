@@ -10,8 +10,6 @@ block content
       input(id="password",name="password",type="password",required) 
       br
       input(id="submit",type="submit", value="Submit")
-      p
-      a(href="/") Go to main bage
       if(typeof errors != 'undefined')
         each error in errors
           li(class="list-group-item list-group-item-danger")=error.msg

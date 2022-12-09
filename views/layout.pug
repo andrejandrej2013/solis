@@ -8,48 +8,71 @@ html(lang="en")
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    
-    nav(class="navbar navbar-expand-lg bg-light")
-      <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/">Solis</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/modules">Modules</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/chat">Chat</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/teacher">Teacher</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/dict">Dict</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/knowledge">Knowledge</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/login">Login</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/reg">Registration</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/profile">Profile</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+    nav.navbar.navbar-expand-lg.bg-light
+      .container-fluid
+        a.navbar-brand(href='/') Solis
+        button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        #navbarNav.collapse.navbar-collapse
+          ul#nav-list.navbar-nav
+            li.nav-item
+              a.nav-link.active(aria-current='page' href='/modules') Modules
+            li.nav-item
+              a.nav-link(href='/chat') Chat
+            li.nav-item
+              a.nav-link(href='/teacher') Teacher
+            li.nav-item
+              a.nav-link(href='/dict') Dict
+            li.nav-item
+              a.nav-link(href='/knowledge') Knowledge
+            script.
+              function getCookie(username) {
+                let name = username + "=";
+                let spli = document.cookie.split(';');
+                for(var j = 0; j < spli.length; j++) {
+                  let char = spli[j];
+                  while (char.charAt(0) == ' ') {
+                    char = char.substring(1);
+                  }
+                  if (char.indexOf(name) == 0) {
+                    return char.substring(name.length, char.length);
+                  }
+                }
+                return "";
+              }
+              var user = getCookie("username");
+              var ul = document.getElementById("nav-list");
+              //- alert("Authorization : "+user);
+              if(user === ""){
+                var notAuthNav={"login":'Login',"reg":'Registration'}
+                for (const [key, value] of Object.entries(notAuthNav)) {
+                  ul.innerHTML += `<li class="nav-item"><a class="nav-link" href="/${key}">${value}</a></li>`;
+                }
+
+                //- li.nav-item
+                //-   a.nav-link(href='/login') Login
+                //- li.nav-item
+                //-   a.nav-link(href='/reg') Registration
+              }
+              else{
+                var AuthNav={"profile":user,"logout":'Logout'}
+                for (const [key, value] of Object.entries(AuthNav)) {
+                  ul.innerHTML += `<li class="nav-item"><a class="nav-link" href="/${key}">${value}</a></li>`;
+                }
+
+                //- li.appendChild(document.createTextNode("Four"));
+                //- ul.appendChild(li);
+                //- var authNav=[user,"Logout"]
+                //- authNav.forEach((e)=>{
+                //-   ul.appendChild(document.createElement(li))
+                //- })
+                
+                //- li.nav-item
+                //-   a.nav-link(href='/profile') Profile
+                //- li.nav-item
+                //-   a.nav-link(href='/logout') Logout
+              }
+
     block content

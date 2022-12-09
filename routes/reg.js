@@ -21,6 +21,8 @@ router.post('/login',[
 
 router.get('/logout', (req, res) => {
     res.clearCookie('Authorization');
+    res.clearCookie('username');
+
     res.redirect('/');
 });
 
