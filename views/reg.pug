@@ -2,10 +2,7 @@ extends layout
 block content
   h1 Regisatration
   div
-    form(action="/reg", method="post") 
-      label(for="username") Login
-      input(id="username",name="username",type="text",required)
-      br
+    form(action="/reg", method="post")
       label(for="email") Email
       input(id="email",name="email",type="email",required)
       br

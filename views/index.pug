@@ -3,11 +3,3 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  div(id="div1")
-  script.
-    const para = document.createElement("p");
-    let allCookies = document.cookie.split(";");
-    const node = document.createTextNode(allCookies);
-    para.appendChild(node);
-    const element = document.getElementById("div1");
-    element.appendChild(para);

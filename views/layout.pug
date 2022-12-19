@@ -28,8 +28,8 @@ html(lang="en")
             li.nav-item
               a.nav-link(href='/knowledge') Knowledge
             script.
-              function getCookie(username) {
-                let name = username + "=";
+              function getCookie(cookie) {
+                let name = cookie + "=";
                 let spli = document.cookie.split(';');
                 for(var j = 0; j < spli.length; j++) {
                   let char = spli[j];
@@ -42,22 +42,16 @@ html(lang="en")
                 }
                 return "";
               }
-              var user = getCookie("username");
+              var user = getCookie("Authorization");
               var ul = document.getElementById("nav-list");
-              //- alert("Authorization : "+user);
               if(user === ""){
                 var notAuthNav={"login":'Login',"reg":'Registration'}
                 for (const [key, value] of Object.entries(notAuthNav)) {
                   ul.innerHTML += `<li class="nav-item"><a class="nav-link" href="/${key}">${value}</a></li>`;
                 }
-
-                //- li.nav-item
-                //-   a.nav-link(href='/login') Login
-                //- li.nav-item
-                //-   a.nav-link(href='/reg') Registration
               }
               else{
-                var AuthNav={"profile":user,"logout":'Logout'}
+                var AuthNav={"profile":"Profile","logout":'Logout'}
                 for (const [key, value] of Object.entries(AuthNav)) {
                   ul.innerHTML += `<li class="nav-item"><a class="nav-link" href="/${key}">${value}</a></li>`;
                 }

@@ -6,7 +6,6 @@ const {check} = require("express-validator");
 
 
 router.post('/reg', [
-    check('username', "Cannot be emplty").notEmpty(),
     check('firstName', "Cannot be emplty").notEmpty(),
     check('lastName', "Cannot be emplty").notEmpty(),
     check('email', "Cannot be emplty").isEmail(),

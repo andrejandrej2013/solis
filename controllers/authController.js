@@ -7,20 +7,26 @@ const saltRounds = 10;
 const {secret, expiresIn} = require("../config")
 // const profileController = require("./profileController")
 
-const generateAccessToken = (id, username) => {
+const generateAccessToken = (id,token) => {
     const payload = {
         id,
-        username,
+        token
     }
     return jwt.sign(payload, secret, {expiresIn: expiresIn})
 }
+const rand = function() {
+    return Math.random().toString(36).substr(2); // remove `0.`
+};
+const tokenGenerator = function() {
+    return rand() + rand(); // to make it longer
+};
 
 class authController {
     async registration(req, res) {
         try{
             let errors = validationResult(req).errors
             console.log(errors)
-            const {username, firstName, lastName, email, password, dateOfBirth} = req.body;
+            const {firstName, lastName, email, password, dateOfBirth} = req.body;
 
             //validate birthday 
             const currentYear = new Date().getFullYear();
@@ -62,7 +68,7 @@ class authController {
             // hash password and saves user
             bcrypt.hash(password, saltRounds, async function(err, hash) {
                 // Store hash in database here
-                const newUser = userModel.build({username:username, firstName:firstName, lastName:lastName, email:email, password:hash, birthday:dateOfBirth});
+                const newUser = userModel.build({firstName:firstName, lastName:lastName, email:email, password:hash, birthday:dateOfBirth,token:tokenGenerator()});
                 const savedUser = await newUser.save().catch(
                     (err) => {
                         console.log("Error: ", err);
@@ -98,14 +104,13 @@ class authController {
                 }
             });
             
-            const token = generateAccessToken(user.id, user.username);
+            const token = generateAccessToken(user.id,user.token);
             console.log(user.id);
 
             req.userId=user.id;
             res.cookie('Authorization',`Bearer ${token}`,{
-                httpOnly:true,
+                httpOnly:false,
             });
-            res.cookie('username',user.username);
             res.redirect('/profile')
         } catch (e) {
             console.log("Error: ", e);
