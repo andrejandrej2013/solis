@@ -1,0 +1,42 @@
+user
+npx sequelize-cli model:generate --name user --attributes user_role_id:integer,email:string,password:string,firstName:string,lastName:string,birthday:date,token:string
+npx sequelize-cli model:generate --name role --attributes role:string
+npx sequelize-cli model:generate --name user_word --attributes user_id:integer,en_word:string,lv_word:string
+npx sequelize-cli model:generate --name strike --attributes user_to_id:integer,user_from_id:integer
+
+chat
+npx sequelize-cli model:generate --name room --attributes user_id:integer,read:boolean
+npx sequelize-cli model:generate --name message --attributes user_id:integer,room_id:integer,message:string
+
+tasks
+npx sequelize-cli model:generate --name task --attributes user_id:integer,difficulty_level_id:integer,description:text,task:string,answer:string
+npx sequelize-cli model:generate --name tasks_marks --attributes user_id:integer,task_id:integer,mark:integer,answer:string
+npx sequelize-cli model:generate --name difficulty_level --attributes difficulty_level:string
+
+word connections 
+npx sequelize-cli model:generate --name en_word --attributes word:string
+npx sequelize-cli model:generate --name en_lv_join --attributes lv_id:integer,en_id:integer
+npx sequelize-cli model:generate --name lv_word --attributes part_of_speech_id:integer,word:string
+npx sequelize-cli model:generate --name part_of_speech --attributes part_of_speech:string
+
+words declension 
+npx sequelize-cli model:generate --name adjective --attributes skaitlis_id:integer,dzimte_id:integer,nenot_g_id:integer,word_id:integer,nominativs:string,genitivs:string,dativs:string,akuzativs:string,instrumentalis:string,lokativs:string
+npx sequelize-cli model:generate --name verb --attributes laiks_id:integer,skaitlis_id:integer,word_id:integer,first_form:string,second_form:string,third_form:string
+npx sequelize-cli model:generate --name noun --attributes deklinacija_id:integer,skaitlis_id:integer,word_id:integer,nominativs:string,genitivs:string,akuzativs:string,instrumentalis:string,lokativs:string,vokativs:string
+
+words additional declension
+npx sequelize-cli model:generate --name skaitlis --attributes skaitlis:string
+npx sequelize-cli model:generate --name dzimte --attributes dzimte:string
+npx sequelize-cli model:generate --name nenot_g --attributes nenot_g:string
+npx sequelize-cli model:generate --name laiks --attributes laiks:string
+npx sequelize-cli model:generate --name deklinacija --attributes deklinacija:string
+
+modules
+npx sequelize-cli model:generate --name word_level_join --attributes level_id:integer,word_id:integer
+npx sequelize-cli model:generate --name level --attributes module_id:integer
+npx sequelize-cli model:generate --name level_completeness --attributes user_id:integer,level_id:integer,completeness:integer
+npx sequelize-cli model:generate --name module --attributes prev_module_id:integer,next_module_id:integer,title:string
+npx sequelize-cli model:generate --name knowledge --attributes module_id:integer,link:string
+
+link
+npx sequelize-cli model:generate --name link --attributes title:string,link:string,description:string

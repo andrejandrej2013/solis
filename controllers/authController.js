@@ -62,7 +62,7 @@ class authController {
             // hash password and saves user
             bcrypt.hash(password, saltRounds, async function(err, hash) {
                 // Store hash in database here
-                const newUser = userModel.build({username:username, firstName:firstName, lastName:lastName, email:email, password:hash, dateOfBirth:dateOfBirth});
+                const newUser = userModel.build({username:username, firstName:firstName, lastName:lastName, email:email, password:hash, birthday:dateOfBirth});
                 const savedUser = await newUser.save().catch(
                     (err) => {
                         console.log("Error: ", err);

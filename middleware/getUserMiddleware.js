@@ -4,11 +4,10 @@ module.exports=function(...args){
     return async (req, res, next)=>{
         try {
             const userId = req.user.id;
-            console.log(args);
-            console.log(typeof args);
+            console.log(userId);
+            console.log(typeof userId);
             const user = await userModel.findOne({
-                where:{id: userId},
-                attributes: args
+                where:{id: userId}
             })
             req.user = user;
             next();
