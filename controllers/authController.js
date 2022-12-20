@@ -7,21 +7,24 @@ const saltRounds = 10;
 const {secret, expiresIn} = require("../config")
 // const profileController = require("./profileController")
 
-const generateAccessToken = (id,token) => {
+const generateAccessToken = (id) => {
     const payload = {
-        id,
-        token
+        id
     }
     return jwt.sign(payload, secret, {expiresIn: expiresIn})
 }
-const rand = function() {
-    return Math.random().toString(36).substr(2); // remove `0.`
-};
-const tokenGenerator = function() {
-    return rand() + rand(); // to make it longer
-};
-
+const authentication = async(user, res)=>{
+    const token = generateAccessToken(user.id);
+    res.cookie('refreshToken',`Bearer ${token}`,{
+        httpOnly:false,
+    });
+    res.cookie('Authorization',`Bearer ${token}`,{
+        httpOnly:true,
+    });
+    return res.redirect('/profile');
+}
 class authController {
+    
     async registration(req, res) {
         try{
             let errors = validationResult(req).errors
@@ -68,7 +71,7 @@ class authController {
             // hash password and saves user
             bcrypt.hash(password, saltRounds, async function(err, hash) {
                 // Store hash in database here
-                const newUser = userModel.build({firstName:firstName, lastName:lastName, email:email, password:hash, birthday:dateOfBirth,token:tokenGenerator()});
+                const newUser = userModel.build({firstName:firstName, lastName:lastName, email:email, password:hash, birthday:dateOfBirth});
                 const savedUser = await newUser.save().catch(
                     (err) => {
                         console.log("Error: ", err);
@@ -76,9 +79,18 @@ class authController {
                     }
                     );
                     if(savedUser){
-                        return res.redirect('/');
+                        return authentication(savedUser, res);
+                        // const token = generateAccessToken(savedUser.id);
+                        // res.cookie('refreshToken',`Bearer ${token}`,{
+                        //     httpOnly:false,
+                        // });
+                        // res.cookie('Authorization',`Bearer ${token}`,{
+                        //     httpOnly:true,
+                        // });
+                        // return res.redirect('/profile');
                     }
                 });
+
         }catch(e){
             console.log("Error: ", e);
             return res.render('reg', {message:"Registration cannot be done at the moment. Please try it later"});
@@ -104,14 +116,15 @@ class authController {
                 }
             });
             
-            const token = generateAccessToken(user.id,user.token);
-            console.log(user.id);
-
-            req.userId=user.id;
-            res.cookie('Authorization',`Bearer ${token}`,{
-                httpOnly:false,
-            });
-            res.redirect('/profile')
+            return authentication(user, res);
+            // const token = generateAccessToken(user.id);
+            // res.cookie('refreshToken',`Bearer ${token}`,{
+            //     httpOnly:false,
+            // });
+            // res.cookie('Authorization',`Bearer ${token}`,{
+            //     httpOnly:true,
+            // });
+            // return res.redirect('/profile');
         } catch (e) {
             console.log("Error: ", e);
             return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
@@ -119,6 +132,7 @@ class authController {
         
         
     }
+    
 }
 
 module.exports = new authController()
