@@ -10,10 +10,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       lv_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'lv_words',
+          key: 'id'
+        }
       },
       en_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'en_words',
+          key: 'id'
+        }
       },
       createdAt: {
         allowNull: false,

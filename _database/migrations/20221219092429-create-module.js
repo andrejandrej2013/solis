@@ -10,10 +10,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       prev_module_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'modules',
+          key: 'id'
+        }
       },
       next_module_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'modules',
+          key: 'id'
+        }
       },
       title: {
         type: Sequelize.STRING

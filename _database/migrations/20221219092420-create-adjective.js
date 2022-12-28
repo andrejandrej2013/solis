@@ -10,16 +10,32 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       skaitlis_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'skaitlis',
+          key: 'id'
+        }
       },
       dzimte_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'dzimtes',
+          key: 'id'
+        }
       },
       nenot_g_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'nenot_gs',
+          key: 'id'
+        }
       },
       word_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'lv_words',
+          key: 'id'
+        }
       },
       nominativs: {
         type: Sequelize.STRING

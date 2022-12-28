@@ -4,45 +4,46 @@ var router = express.Router();
 const authMiddleware = require ("../middleware/authMiddleware")
 const profileController = require("../controllers/profileController")
 const registerApi = require("./reg");
+const moduleApi = require("./module");
+
+
 const getUserMiddleware = require('../middleware/getUserMiddleware');
 
 //use routes
 router.use(registerApi);
+router.use(moduleApi);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Solis' });
 });
 // users reg
-router.get('/reg',[
-  authMiddleware.notAuthenticated,
-], async function(req, res, next) {
+router.get('/reg', async function(req, res, next) {
   res.render('reg');
 });
 
-router.get('/login',[
-  authMiddleware.notAuthenticated,
-], function(req, res, next) {
+router.get('/login', function(req, res, next) {
   res.render('login');
 });
 router.get('/profile', [
-  authMiddleware.decodeToken,
+  authMiddleware.isAuthenticated,
   getUserMiddleware('username','email','firstName','lastName'),
 ], profileController.profile)
 
-router.get('/modules', function(req, res, next) {
-  res.render('modules');
-});
+// router.get('/modules', function(req, res, next) {
+//   res.render('modules');
+// });
+
 router.get('/dict', function(req, res, next) {
   res.render('dict');
 });
 router.get('/teacher',[
-  authMiddleware.decodeToken,
+  authMiddleware.isAuthenticated,
 ], function(req, res, next) {
   res.render('teacher');
 });
 router.get('/chat',[
-  authMiddleware.decodeToken,
+  authMiddleware.isAuthenticated,
 ], function(req, res, next) {
   res.render('chat');
 });

@@ -10,10 +10,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       level_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'levels',
+          key: 'id'
+        }
       },
       word_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'lv_words',
+          key: 'id'
+        }
       },
       createdAt: {
         allowNull: false,

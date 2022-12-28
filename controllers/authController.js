@@ -4,24 +4,16 @@ const jwt = require('jsonwebtoken');//add token
 // const dotenv = require('dotenv');
 const {validationResult} = require("express-validator");
 const saltRounds = 10;
-const {secret, expiresIn} = require("../config")
+const {secret, accessExpiresIn, refreshExpiresIn} = require("../config")
+const { v4: uuidv4 } = require('uuid');
 // const profileController = require("./profileController")
 
-const generateAccessToken = (id) => {
+const generateAccessToken = (id,expiresIn,uuid=uuidv4()) => {
     const payload = {
-        id
+        id,
+        uuid
     }
     return jwt.sign(payload, secret, {expiresIn: expiresIn})
-}
-const authentication = async(user, res)=>{
-    const token = generateAccessToken(user.id);
-    res.cookie('refreshToken',`Bearer ${token}`,{
-        httpOnly:false,
-    });
-    res.cookie('Authorization',`Bearer ${token}`,{
-        httpOnly:true,
-    });
-    return res.redirect('/profile');
 }
 class authController {
     
@@ -79,15 +71,16 @@ class authController {
                     }
                     );
                     if(savedUser){
-                        return authentication(savedUser, res);
-                        // const token = generateAccessToken(savedUser.id);
-                        // res.cookie('refreshToken',`Bearer ${token}`,{
-                        //     httpOnly:false,
-                        // });
-                        // res.cookie('Authorization',`Bearer ${token}`,{
-                        //     httpOnly:true,
-                        // });
-                        // return res.redirect('/profile');
+                        // return authentication(savedUser, res);
+                        const refreshToken = generateAccessToken(savedUser.id,refreshExpiresIn);
+                        res.cookie('refreshToken',`Bearer ${refreshToken}`,{
+                            httpOnly:false,
+                        });
+                        const accessToken = generateAccessToken(savedUser.id,accessExpiresIn);
+                        res.cookie('Authorization',`Bearer ${accessToken}`,{
+                            httpOnly:true,
+                        });
+                        return res.redirect('/profile');
                     }
                 });
 
@@ -115,16 +108,17 @@ class authController {
                     return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});
                 }
             });
-            
-            return authentication(user, res);
-            // const token = generateAccessToken(user.id);
-            // res.cookie('refreshToken',`Bearer ${token}`,{
-            //     httpOnly:false,
-            // });
-            // res.cookie('Authorization',`Bearer ${token}`,{
-            //     httpOnly:true,
-            // });
-            // return res.redirect('/profile');
+
+            const refreshToken = generateAccessToken(user.id,refreshExpiresIn);
+            res.cookie('refreshToken',`Bearer ${refreshToken}`,{
+                httpOnly:true,
+            });
+            const accessToken = generateAccessToken(user.id,accessExpiresIn);
+            res.cookie('Authorization',`Bearer ${accessToken}`,{
+                httpOnly:false,
+            });
+            return res.redirect('/profile');
+
         } catch (e) {
             console.log("Error: ", e);
             return res.render('login', {message:"Login cannot be done at the moment. Please try it later"});

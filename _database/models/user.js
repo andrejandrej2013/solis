@@ -23,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.message,{
         foreignKey : 'user_id'
       });
+      this.hasMany(models.level_completeness, {
+      	foreignKey : 'user_id'
+      });
     }
   }
   user.init({

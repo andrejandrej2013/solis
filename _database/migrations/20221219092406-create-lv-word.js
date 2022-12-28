@@ -10,7 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       part_of_speech_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'part_of_speeches',
+          key: 'id'
+        }
       },
       word: {
         type: Sequelize.STRING

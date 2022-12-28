@@ -11,7 +11,11 @@ module.exports = {
       },
       user_role_id: {
         type: Sequelize.INTEGER,
-        defaultValue: 1
+        defaultValue: 1,
+        references: {
+          model: 'roles',
+          key: 'id'
+        }
       },
       email: {
         type: Sequelize.STRING

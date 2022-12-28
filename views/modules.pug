@@ -1,3 +1,15 @@
 extends layout
 block content
-  h1 Here we'll be modules
+  h2 Knowledge
+  h2 Modules
+  .d-flex.flex-wrap
+    - let i = 1
+    each module in modules
+      a.nav-link(href=`module/${module.id}`)
+        .card(style='width: 18rem;')
+          .card-body
+            h5.card-title #{i}. #{module.title}
+            - i++
+            h6.card-subtitle.mb-2.text-muted #{module.access}
+            p.card-text #{module.userPercentage}%
+

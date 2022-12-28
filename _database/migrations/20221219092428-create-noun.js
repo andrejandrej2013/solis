@@ -10,13 +10,25 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       deklinacija_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'deklinacijas',
+          key: 'id'
+        }
       },
       skaitlis_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'skaitlis',
+          key: 'id'
+        }
       },
       word_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'lv_words',
+          key: 'id'
+        }
       },
       nominativs: {
         type: Sequelize.STRING

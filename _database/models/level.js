@@ -10,14 +10,28 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.module, {
+      	foreignKey : 'module_id'
+      });
+      this.hasMany(models.level_completeness, {
+      	foreignKey : 'level_id'
+      });
     }
+    
   }
   level.init({
-    module_id: DataTypes.INTEGER
+    module_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'modules',
+        key: 'id'
+      }
+    },
   }, {
     sequelize,
     modelName: 'level',
   });
+  
   return level;
+  
 };

@@ -10,7 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       module_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'modules',
+          key: 'id'
+        }
       },
       link: {
         type: Sequelize.STRING
