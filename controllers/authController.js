@@ -74,11 +74,11 @@ class authController {
                         // return authentication(savedUser, res);
                         const refreshToken = generateAccessToken(savedUser.id,refreshExpiresIn);
                         res.cookie('refreshToken',`Bearer ${refreshToken}`,{
-                            httpOnly:false,
+                            httpOnly:true,
                         });
                         const accessToken = generateAccessToken(savedUser.id,accessExpiresIn);
                         res.cookie('Authorization',`Bearer ${accessToken}`,{
-                            httpOnly:true,
+                            httpOnly:false,
                         });
                         return res.redirect('/profile');
                     }

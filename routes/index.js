@@ -22,6 +22,12 @@ router.get('/reg', async function(req, res, next) {
   res.render('reg');
 });
 
+router.get('/premium',[
+  authMiddleware.isAuthenticated,
+], (req, res) => {
+  res.render('premium')
+});
+
 router.get('/login', function(req, res, next) {
   res.render('login');
 });

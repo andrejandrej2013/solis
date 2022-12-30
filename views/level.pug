@@ -1,0 +1,7 @@
+extends layout
+block content
+    h2 Knowledge
+    h2 Levels 
+    each level,index in levels 
+        a(href=`/generate_level/${moduleId}/${level.id}`)
+            div.rounded-circle= `${index+1}. competeness: ${level.level_completenesses.completeness}`

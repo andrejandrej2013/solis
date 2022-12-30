@@ -5,6 +5,7 @@ const {check} = require("express-validator");
 
 
 
+
 router.post('/reg', [
     check('firstName', "Cannot be emplty").notEmpty(),
     check('lastName', "Cannot be emplty").notEmpty(),
@@ -24,5 +25,7 @@ router.get('/logout', (req, res) => {
 
     res.redirect('/');
 });
+
+
 
 module.exports = router;

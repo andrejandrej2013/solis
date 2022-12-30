@@ -27,6 +27,8 @@ class authMiddleware{
                                     value: err.name,
                                     msg: err.message,
                                 }) ;
+                                res.clearCookie('Authorization');
+                                res.clearCookie('refreshToken');
                                 res.redirect('/login')
                             }
                             else if(decoded){
@@ -79,10 +81,15 @@ class authMiddleware{
                                     httpOnly:false,
                                 });
                             }
+                            else if(err){
+                                res.clearCookie('Authorization');
+                                res.clearCookie('refreshToken');
+                            }
                         })
                     }
                     else if(decoded){
                         req.userId=decoded.id
+                        
                     }
                 });
             }
