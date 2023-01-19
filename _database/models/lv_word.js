@@ -10,7 +10,21 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.part_of_speech, {
+        foreignKey : 'part_of_speech_id'
+      });
+      this.hasMany(models.en_lv_join, {
+        foreignKey : 'lv_id'
+      });
+      this.hasOne(models.noun, {
+        foreignKey : 'word_id'
+      });
+      this.hasOne(models.verb, {
+        foreignKey : 'word_id'
+      });
+      this.hasOne(models.adjective, {
+        foreignKey : 'word_id'
+      });
     }
   }
   lv_word.init({
